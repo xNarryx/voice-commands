@@ -18,5 +18,13 @@
     <ClCompile Include="voice speach.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="opera_control.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="opera_control.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

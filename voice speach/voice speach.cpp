@@ -9,14 +9,13 @@
 #include <chrono>
 #include <limits>
 #include <codecvt>
-#include <mpg123.h>
-#include <out123.h>
 #include <curl/curl.h>
 #include <SFML/Audio.hpp>
 #include <random>
 #include <nlohmann/json.hpp>
 #include <cctype>
 #include <regex>
+#include "opera_control.h"
 
 #define VK_MEDIA_NEXT_TRACK 0xB0
 #define VK_MEDIA_PREV_TRACK 0xB1
@@ -182,10 +181,18 @@ void stopPythonScript() {
 		std::cout << "Скрипт остановлен" << std::endl;
 	}
 }
-double threshold = 65.0;
+double threshold = 80.0;
 
 int main()
 {
+	std::cout << "browser initialization trying\n";
+	if (operaInit("localhost", 9222)) {
+		std::cout << "sucsesfuly\n";
+	}
+	else {
+		std::cout << "error\n";
+	}
+
 	SetConsoleOutputCP(CP_UTF8);
 	setlocale(LC_ALL, "ru_RU.UTF-8");
 	std::string line, lineprev;
@@ -267,7 +274,17 @@ int main()
 							if (++nextArgIt != args.end()) {
 								auto& nextArg = *nextArgIt;
 								if (similarity(nextArg, to_utf8(L"браузер")) >= threshold) {
+									std::cout << "compare: \"" << nextArg << "\" (" << match << "%)\n";
 									BringWindowToFrontByPartialTitle(L"opera");
+								}
+								if (similarity(nextArg, to_utf8(L"ютуб")) >= threshold) {
+									std::cout << "compare: \"" << nextArg << "\" (" << match << "%)\n";
+									if (openTab("https://youtube.com")) {
+										std::cout << "opened youtube\n";
+									}
+									else {
+										std::cout << "cant open\n";
+									}
 								}
 							}
 							std::cout << "compare: \"" << cmd << "\" (" << match << "%)\n";
